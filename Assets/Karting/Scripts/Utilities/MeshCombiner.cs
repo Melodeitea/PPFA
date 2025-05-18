@@ -22,7 +22,7 @@ public class MeshCombiner : MonoBehaviour
         List<MeshRenderer> validRenderers = new List<MeshRenderer>();
         foreach (GameObject combineParent in combineParents)
         {
-            validRenderers.AddRange(combineParent.GetComponentsInChildren<MeshRenderer>());
+           // validRenderers.AddRange(combineParent.GetComponentsInChildren<MeshRenderer>());
         }
 
         if (useGrid)

@@ -40,7 +40,7 @@ public class FeedbackFlashHUD : MonoBehaviour
         DebugUtility.HandleErrorIfNullFindObject<AudioSource, FeedbackFlashHUD>(m_audioSource, this);
     }
 
-    private void Update()
+    void Update ()
     {
         if (!m_timeManager.IsFinite) return;
         
