@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class DialogTrigger : MonoBehaviour
 {
-    public string speakerName;
-    [TextArea]
-    public string dialogLine;
-    public AudioClip voiceClip;
+    public DialogSequence sequence;
 
-    public DialogManager dialogManager;
+    private bool triggered = false;
 
-    public void TriggerDialog()
+    void OnTriggerEnter(Collider other)
     {
-        if (dialogManager != null)
-            dialogManager.ShowDialog(speakerName, dialogLine, voiceClip);
+        if (triggered) return;
+        if (!other.CompareTag("Player")) return;
+
+        DialogManager manager = FindObjectOfType<DialogManager>();
+        if (manager && sequence != null)
+        {
+            manager.PlayDialog(sequence);
+            triggered = true;
+        }
     }
 }

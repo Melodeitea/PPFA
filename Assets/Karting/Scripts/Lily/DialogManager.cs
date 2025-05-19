@@ -1,64 +1,95 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using TMPro;
 
 public class DialogManager : MonoBehaviour
 {
-    public CanvasGroup dialogCanvasGroup;
-    public Text dialogText;
-    public Text speakerNameText;
+    public CanvasGroup dialogCanvas;
+    public TMP_Text speakerNameText;
+    public TMP_Text dialogText;
+    public AudioSource audioSource;
     public float fadeDuration = 0.3f;
-    public float textDisplayDuration = 4f;
-    public AudioSource voiceAudioSource;
+    public float typeSpeed = 40f;
 
-    Coroutine currentDialogRoutine;
+    private Coroutine currentDialog;
+    private bool isTyping;
+    private bool skipTyping;
 
     void Awake()
     {
-        dialogCanvasGroup.alpha = 0;
-        dialogCanvasGroup.gameObject.SetActive(false);
+        dialogCanvas.alpha = 0;
+        dialogCanvas.interactable = false;
+        dialogCanvas.blocksRaycasts = false;
     }
 
-    public void ShowDialog(string speaker, string message, AudioClip voiceClip = null)
+    public void PlayDialog(DialogSequence sequence)
     {
-        if (currentDialogRoutine != null)
-            StopCoroutine(currentDialogRoutine);
+        if (currentDialog != null)
+            StopCoroutine(currentDialog);
 
-        currentDialogRoutine = StartCoroutine(DisplayDialogRoutine(speaker, message, voiceClip));
+        currentDialog = StartCoroutine(PlaySequence(sequence));
     }
 
-    IEnumerator DisplayDialogRoutine(string speaker, string message, AudioClip voiceClip)
+    IEnumerator PlaySequence(DialogSequence sequence)
     {
-        dialogCanvasGroup.gameObject.SetActive(true);
-        dialogText.text = message;
-        speakerNameText.text = speaker;
+        yield return FadeCanvas(1);
 
-        // Fade in
-        yield return StartCoroutine(FadeCanvasGroup(dialogCanvasGroup, 0f, 1f));
-
-        // Play voice line
-        if (voiceClip != null && voiceAudioSource != null)
+        foreach (var line in sequence.lines)
         {
-            voiceAudioSource.clip = voiceClip;
-            voiceAudioSource.Play();
+            speakerNameText.text = line.speakerName;
+            if (line.voiceClip) audioSource.PlayOneShot(line.voiceClip);
+            yield return TypeText(line.content);
+
+            yield return new WaitForSeconds(line.duration);
         }
 
-        yield return new WaitForSeconds(textDisplayDuration);
-
-        // Fade out
-        yield return StartCoroutine(FadeCanvasGroup(dialogCanvasGroup, 1f, 0f));
-        dialogCanvasGroup.gameObject.SetActive(false);
+        yield return FadeCanvas(0);
     }
 
-    IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end)
+    IEnumerator TypeText(string content)
     {
-        float t = 0f;
-        while (t < fadeDuration)
+        isTyping = true;
+        skipTyping = false;
+        dialogText.text = "";
+
+        foreach (char c in content)
         {
-            cg.alpha = Mathf.Lerp(start, end, t / fadeDuration);
-            t += Time.deltaTime;
+            if (skipTyping) break;
+            dialogText.text += c;
+            yield return new WaitForSeconds(1f / typeSpeed);
+        }
+
+        dialogText.text = content;
+        isTyping = false;
+    }
+
+    public void SkipOrAdvance()
+    {
+        if (isTyping)
+            skipTyping = true;
+    }
+
+    IEnumerator FadeCanvas(float target)
+    {
+        float start = dialogCanvas.alpha;
+        float time = 0;
+        dialogCanvas.interactable = true;
+        dialogCanvas.blocksRaycasts = true;
+
+        while (time < fadeDuration)
+        {
+            dialogCanvas.alpha = Mathf.Lerp(start, target, time / fadeDuration);
+            time += Time.deltaTime;
             yield return null;
         }
-        cg.alpha = end;
+
+        dialogCanvas.alpha = target;
+        if (target == 0)
+        {
+            dialogCanvas.interactable = false;
+            dialogCanvas.blocksRaycasts = false;
+        }
     }
 }
