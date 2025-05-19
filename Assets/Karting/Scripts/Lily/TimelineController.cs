@@ -1,16 +1,18 @@
 using UnityEngine;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 public class TimelineController : MonoBehaviour
 {
-    public float totalDuration = 180f; // 3 minutes
+    public float totalDuration = 180f;
     private float timer;
 
     [System.Serializable]
     public class TimedEvent
     {
+        public string eventName;
         public float triggerTime;
-        public UnityEngine.Events.UnityEvent onTrigger;
+        public UnityEvent onTrigger;
         public bool hasTriggered = false;
     }
 
@@ -24,6 +26,7 @@ public class TimelineController : MonoBehaviour
         {
             if (!e.hasTriggered && timer >= e.triggerTime)
             {
+                Debug.Log($"[Timeline] Triggering: {e.eventName} at {timer:F2}s");
                 e.onTrigger.Invoke();
                 e.hasTriggered = true;
             }
@@ -37,7 +40,16 @@ public class TimelineController : MonoBehaviour
 
     void EndSequence()
     {
-        Debug.Log("Game finished or transition to end scene.");
-        // e.g., trigger final cinematic or result screen
+        Debug.Log("[Timeline] Sequence ended.");
+        // Trigger anything here like fade, end cutscene, etc.
+    }
+
+    public void ResetTimeline()
+    {
+        timer = 0f;
+        foreach (var e in events)
+        {
+            e.hasTriggered = false;
+        }
     }
 }
