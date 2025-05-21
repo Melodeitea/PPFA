@@ -133,4 +133,9 @@ public class MotorbikeController : MonoBehaviour
 
     public float GetSpeed() => rb.velocity.magnitude;
     public bool IsDrifting() => isDrifting;
+
+private float gripMultiplier = 1f;
+public void SetGripMultiplier(float value) => gripMultiplier = value;
+public void ResetGripMultiplier() => gripMultiplier = 1f;
+
 }
