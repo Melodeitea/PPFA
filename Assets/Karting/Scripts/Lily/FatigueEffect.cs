@@ -1,34 +1,32 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-
+using UnityEngine.UI;
 
 public class FatigueEffect : MonoBehaviour
 {
-    public Volume postProcessingVolume;
+    [Header("Fatigue Parameters")]
     public float fatigueDuration = 15f;
     public float fatigueGripMultiplier = 0.7f;
-    public float blurIntensity = 1f;
     public Light blindingLight;
+
+    [Header("UI Overlay")]
+    public CanvasGroup blurCanvasGroup; // Simule la vision floue avec une UI
+    public float maxBlurAlpha = 0.8f;
 
     private float timer;
     private MotorbikeController bike;
-    private DepthOfField dof;
 
     public void ActivateFatigue()
     {
         bike = FindObjectOfType<MotorbikeController>();
-        if (bike != null) bike.SetGripMultiplier(fatigueGripMultiplier);
+        if (bike != null)
+            bike.SetGripMultiplier(fatigueGripMultiplier);
 
-        postProcessingVolume.profile.TryGet(out dof);
-        if (dof != null)
-        {
-            dof.active = true;
-            dof.focusDistance.Override(blurIntensity);
-        }
+        if (blurCanvasGroup != null)
+            blurCanvasGroup.alpha = maxBlurAlpha;
 
-        if (blindingLight) blindingLight.enabled = true;
+        if (blindingLight != null)
+            blindingLight.enabled = true;
 
         timer = fatigueDuration;
         StartCoroutine(FatigueTimer());
@@ -39,7 +37,8 @@ public class FatigueEffect : MonoBehaviour
         while (timer > 0)
         {
             timer -= Time.deltaTime;
-            if (blindingLight)
+
+            if (blindingLight != null)
                 blindingLight.intensity = Mathf.PingPong(Time.time * 10f, 3f) + 1f;
 
             yield return null;
@@ -50,8 +49,16 @@ public class FatigueEffect : MonoBehaviour
 
     public void DeactivateFatigue()
     {
-        if (bike != null) bike.ResetGripMultiplier();
-        if (dof != null) dof.active = false;
-        if (blindingLight) blindingLight.enabled = false;
+        if (bike != null)
+            bike.ResetGripMultiplier();
+
+        if (blurCanvasGroup != null)
+            blurCanvasGroup.alpha = 0f;
+
+        if (blindingLight != null)
+        {
+            blindingLight.intensity = 0f;
+            blindingLight.enabled = false;
+        }
     }
 }
