@@ -4,138 +4,109 @@ using UnityEngine;
 public class MotorbikeController : MonoBehaviour
 {
     [Header("Input")]
-    public ControllerInput input; // Reference to your DualShock controller input script
+    public ControllerInput input;
 
-    [Header("Movement Settings")]
-    public float baseSpeed = 10f;
+    [Header("Movement")]
+    public float acceleration = 1000f;
+    public float brakeForce = 800f;
+    public float turnSpeed = 50f;
     public float maxSpeed = 50f;
-    public float acceleration = 20f;
-    public float brakeForce = 15f;
-    public float turnSpeed = 100f;
-    public float driftFactor = 0.9f;
 
-    [Header("Suspension")]
-    public Transform[] wheelPoints;
-    public float suspensionDistance = 0.5f;
-    public float suspensionStrength = 20000f;
-    public float wheelRadius = 0.35f;
-    public LayerMask groundLayer;
+    [Header("Stability")]
+    public float uprightForce = 5000f;
+    public float leanAngle = 25f;
+    public float leanSmoothing = 5f;
 
-    [Header("FX & Visuals")]
-    public Transform[] wheelMeshes;
-    public ParticleSystem driftFX;
-    public TrailRenderer[] driftTrails;
-
+    private float gripMultiplier = 1f;
     private Rigidbody rb;
-    private bool isDrifting;
+    private float currentSpeed = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        if (input == null)
-        {
-            Debug.LogError("ControllerInput reference is not assigned on " + gameObject.name);
-        }
+        rb.centerOfMass = new Vector3(0, -0.5f, 0); // Lower CoM for stability
     }
 
     void FixedUpdate()
     {
-        if (input == null) return;
-
-        HandleSuspension();
         ApplyMovement();
-        HandleDrift();
-        UpdateVisuals();
+        ApplyStabilization();
+        ApplyLeaning();
+        ClampMaxSpeed();
     }
 
     private void ApplyMovement()
     {
         Vector3 forward = transform.forward;
 
-        // Use input from DualShock controller
-        float throttle = Mathf.Clamp01(input.throttleInput); // Up = 1, Down = -1
-        float brake = Mathf.Clamp01(-input.throttleInput);   // Down = -1 becomes 1
+        float throttle = Mathf.Clamp01(input.throttleInput);
+        float brake = Mathf.Clamp01(input.brakeInput);
         float steering = input.steeringInput;
 
-        float targetSpeed = baseSpeed + throttle * acceleration;
+        // --- Progressive acceleration ---
+        float targetSpeed = throttle * maxSpeed;
+        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.fixedDeltaTime);
+        Vector3 desiredVelocity = forward * currentSpeed;
+        Vector3 force = (desiredVelocity - rb.velocity) * gripMultiplier;
+        rb.AddForce(force, ForceMode.Acceleration);
 
-        Vector3 forwardVelocity = Vector3.Project(rb.velocity, forward);
-
-        if (forwardVelocity.magnitude < maxSpeed)
-        {
-            rb.AddForce(forward * targetSpeed, ForceMode.Acceleration);
-        }
-
+        // --- Progressive Braking with Drift Support ---
         if (brake > 0f)
         {
-            rb.AddForce(-forward * brakeForce * brake, ForceMode.Acceleration);
+            Vector3 forwardVel = Vector3.Project(rb.velocity, forward);
+            Vector3 brakeForceVec = -forwardVel * brake * brakeForce * Time.fixedDeltaTime;
+
+            rb.AddForce(brakeForceVec, ForceMode.VelocityChange);
+
+            // Optional: add lateral velocity damping to simulate tire slip
+            Vector3 lateralVel = Vector3.Project(rb.velocity, transform.right);
+            rb.AddForce(-lateralVel * 0.5f * brake, ForceMode.VelocityChange);
         }
 
+        // --- Steering ---
         float steerAmount = steering * turnSpeed * Time.fixedDeltaTime;
-        Quaternion turnOffset = Quaternion.Euler(0f, steerAmount, 0f);
-        rb.MoveRotation(rb.rotation * turnOffset);
+        Quaternion steerRotation = Quaternion.Euler(0f, steerAmount, 0f);
+        rb.MoveRotation(rb.rotation * steerRotation);
     }
 
-    private void HandleSuspension()
+
+    private void ApplyStabilization()
     {
-        foreach (Transform wheel in wheelPoints)
-        {
-            Ray ray = new Ray(wheel.position, -wheel.up);
-            if (Physics.Raycast(ray, out RaycastHit hit, suspensionDistance + wheelRadius, groundLayer))
-            {
-                float suspensionForce = (suspensionDistance - hit.distance) / suspensionDistance;
-                suspensionForce = Mathf.Clamp01(suspensionForce);
-                Vector3 force = wheel.up * suspensionForce * suspensionStrength;
-                rb.AddForceAtPosition(force, wheel.position);
-            }
-        }
+        Vector3 predictedUp = Quaternion.AngleAxis(
+            rb.angularVelocity.magnitude * Mathf.Rad2Deg * uprightForce / rb.mass,
+            rb.angularVelocity
+        ) * transform.up;
+
+        Vector3 torqueVector = Vector3.Cross(predictedUp, Vector3.up);
+        rb.AddTorque(torqueVector * uprightForce * Time.fixedDeltaTime);
     }
 
-    private void HandleDrift()
+    private void ApplyLeaning()
     {
-        // Simple drift: press PS4 X button (mapped as "Jump" in Input Manager or manually via Input.GetKey)
-        isDrifting = Input.GetButton("Jump"); // Make sure "Jump" is mapped to "joystick button 1"
-
-        if (isDrifting)
+        if (rb.velocity.magnitude > 1f)
         {
-            Vector3 forwardVelocity = Vector3.Project(rb.velocity, transform.forward);
-            Vector3 sidewaysVelocity = Vector3.Project(rb.velocity, transform.right);
-            rb.velocity = forwardVelocity + sidewaysVelocity * driftFactor;
+            float leanInput = input.steeringInput * input.throttleInput * gripMultiplier;
+            float targetLean = Mathf.Clamp(leanInput * leanAngle, -30f, 30f);
 
-            if (driftFX != null && !driftFX.isPlaying)
-                driftFX.Play();
+            Quaternion currentRotation = rb.rotation;
+            Quaternion leanRotation = Quaternion.Euler(
+                currentRotation.eulerAngles.x,
+                currentRotation.eulerAngles.y,
+                -targetLean
+            );
 
-            foreach (var trail in driftTrails)
-                trail.emitting = true;
-        }
-        else
-        {
-            if (driftFX != null && driftFX.isPlaying)
-                driftFX.Stop();
-
-            foreach (var trail in driftTrails)
-                trail.emitting = false;
+            rb.MoveRotation(Quaternion.Slerp(currentRotation, leanRotation, Time.fixedDeltaTime * leanSmoothing));
         }
     }
 
-    private void UpdateVisuals()
+    private void ClampMaxSpeed()
     {
-        for (int i = 0; i < wheelPoints.Length && i < wheelMeshes.Length; i++)
+        if (rb.velocity.magnitude > maxSpeed)
         {
-            Ray ray = new Ray(wheelPoints[i].position, -wheelPoints[i].up);
-            if (Physics.Raycast(ray, out RaycastHit hit, suspensionDistance + wheelRadius, groundLayer))
-            {
-                wheelMeshes[i].position = hit.point + Vector3.up * wheelRadius;
-            }
+            rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
 
-    public float GetSpeed() => rb.velocity.magnitude;
-    public bool IsDrifting() => isDrifting;
-
-private float gripMultiplier = 1f;
-public void SetGripMultiplier(float value) => gripMultiplier = value;
-public void ResetGripMultiplier() => gripMultiplier = 1f;
-
+    public void SetGripMultiplier(float value) => gripMultiplier = value;
+    public void ResetGripMultiplier() => gripMultiplier = 1f;
 }
