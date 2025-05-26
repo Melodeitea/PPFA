@@ -20,6 +20,7 @@ public class MotorbikeController : MonoBehaviour
     private float gripMultiplier = 1f;
     private Rigidbody rb;
     private float currentSpeed = 0f;
+    private bool hasCrashed = false;
 
     void Start()
     {
@@ -109,4 +110,25 @@ public class MotorbikeController : MonoBehaviour
 
     public void SetGripMultiplier(float value) => gripMultiplier = value;
     public void ResetGripMultiplier() => gripMultiplier = 1f;
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (hasCrashed) return;
+
+        if (col.collider.CompareTag("Trees") || col.collider.CompareTag("Car") || col.collider.CompareTag("Animal"))
+        {
+            hasCrashed = true;
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb) rb.velocity = Vector3.zero;
+
+            GameEndingManager endingManager = FindObjectOfType<GameEndingManager>();
+            if (endingManager != null)
+            {
+                endingManager.TriggerBadEnding_Crash();
+            }
+
+            // Optionally: disable controls, add camera shake, etc.
+            // For example: enabled = false;
+        }
+    }
 }
