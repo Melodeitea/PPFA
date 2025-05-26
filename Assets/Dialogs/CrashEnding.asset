@@ -10,10 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68593403f8a0fcc44acfc9b9c4ca9a8a, type: 3}
-  m_Name: BadEnding
+  m_Name: CrashEnding
   m_EditorClassIdentifier: 
   lines:
   - speakerName: Child
     content: " Dad?!\r\n Pick up! Please, just\u2014\r\n Just answer me!\r\n"
+    duration: 0
+    voiceClip: {fileID: 0}
+  - speakerName: Child
+    content: " Dad?!\r\r\n"
+    duration: 0
+    voiceClip: {fileID: 0}
+  - speakerName: Child
+    content: " Dad!\r\r\n"
     duration: 0
     voiceClip: {fileID: 0}
