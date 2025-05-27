@@ -5,19 +5,21 @@ public class ControllerInput : MonoBehaviour
     [Header("Output")]
     public float throttleInput;  // RT
     public float brakeInput;     // LT
-    public float steeringInput;  // Right Stick X
-    public float cameraInput;    // Left Stick X
+    public float steeringInput;  // Left Stick X
+    public float cameraInput;    // Right Stick X
 
     void Update()
     {
-        // Triggers - map these correctly in Input Manager
-        throttleInput = Input.GetAxis("RT"); // 0 to 1
-        brakeInput = Input.GetAxis("LT");    // 0 to 1
+        // RT (Axis 10) — 0 to 1
+        throttleInput = Mathf.Clamp01(Input.GetAxis("RT"));
 
-        // Right Stick controls bike turning
-        steeringInput = Input.GetAxis("RightStickX");
+        // LT (Axis 9) — 0 to 1
+        brakeInput = Mathf.Clamp01(Input.GetAxis("LT"));
 
-        // Left Stick X controls camera yaw
-        cameraInput = Input.GetAxis("Horizontal"); // or a custom "LeftStickX" if needed
+        // Steering — Left Stick X (Axis 1)
+        steeringInput = Input.GetAxis("LeftStickX");
+
+        // Camera — Right Stick X (Axis 4)
+        cameraInput = Input.GetAxis("RightStickX");
     }
 }

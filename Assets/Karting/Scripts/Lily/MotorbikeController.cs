@@ -6,6 +6,7 @@ public class MotorbikeController : MonoBehaviour
     [Header("Input")]
     public ControllerInput input;
 
+
     [Header("Movement")]
     public float acceleration = 1000f;
     public float brakeForce = 800f;
@@ -19,7 +20,7 @@ public class MotorbikeController : MonoBehaviour
 
     private float gripMultiplier = 1f;
     private Rigidbody rb;
-    private float currentSpeed = 0f;
+    private float currentSpeed = 10f;
     private bool hasCrashed = false;
 
     void Start()
@@ -38,37 +39,38 @@ public class MotorbikeController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        Vector3 forward = transform.forward;
+        Vector3 flatForward = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
 
         float throttle = Mathf.Clamp01(input.throttleInput);
         float brake = Mathf.Clamp01(input.brakeInput);
         float steering = input.steeringInput;
 
-        // --- Progressive acceleration ---
         float targetSpeed = throttle * maxSpeed;
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.fixedDeltaTime);
-        Vector3 desiredVelocity = forward * currentSpeed;
-        Vector3 force = (desiredVelocity - rb.velocity) * gripMultiplier;
+
+        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 desiredVelocity = flatForward * currentSpeed;
+        Vector3 velocityDiff = desiredVelocity - flatVelocity;
+
+        Vector3 force = velocityDiff * gripMultiplier;
         rb.AddForce(force, ForceMode.Acceleration);
 
-        // --- Progressive Braking with Drift Support ---
         if (brake > 0f)
         {
-            Vector3 forwardVel = Vector3.Project(rb.velocity, forward);
+            Vector3 forwardVel = Vector3.Project(flatVelocity, flatForward);
             Vector3 brakeForceVec = -forwardVel * brake * brakeForce * Time.fixedDeltaTime;
-
             rb.AddForce(brakeForceVec, ForceMode.VelocityChange);
 
-            // Optional: add lateral velocity damping to simulate tire slip
-            Vector3 lateralVel = Vector3.Project(rb.velocity, transform.right);
+            Vector3 lateralVel = Vector3.Project(flatVelocity, transform.right);
             rb.AddForce(-lateralVel * 0.5f * brake, ForceMode.VelocityChange);
         }
 
-        // --- Steering ---
         float steerAmount = steering * turnSpeed * Time.fixedDeltaTime;
         Quaternion steerRotation = Quaternion.Euler(0f, steerAmount, 0f);
         rb.MoveRotation(rb.rotation * steerRotation);
     }
+
+
 
 
     private void ApplyStabilization()
@@ -102,10 +104,13 @@ public class MotorbikeController : MonoBehaviour
 
     private void ClampMaxSpeed()
     {
-        if (rb.velocity.magnitude > maxSpeed)
+        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        if (flatVelocity.magnitude > maxSpeed)
         {
-            rb.velocity = rb.velocity.normalized * maxSpeed;
+            Vector3 clampedFlat = flatVelocity.normalized * maxSpeed;
+            rb.velocity = new Vector3(clampedFlat.x, rb.velocity.y, clampedFlat.z);
         }
+
     }
 
     public void SetGripMultiplier(float value) => gripMultiplier = value;
