@@ -39,36 +39,42 @@ public class MotorbikeController : MonoBehaviour
 
     private void ApplyMovement()
     {
-        Vector3 flatForward = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
+        // 1. Direction "plate" dans le monde, mais conservant la pente du terrain
+        Vector3 groundForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
 
         float throttle = Mathf.Clamp01(input.throttleInput);
         float brake = Mathf.Clamp01(input.brakeInput);
         float steering = input.steeringInput;
 
+        // 2. Calcul de vitesse cible
         float targetSpeed = throttle * maxSpeed;
-        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.fixedDeltaTime);
+        Vector3 flatVelocity = Vector3.ProjectOnPlane(rb.velocity, Vector3.up);
+        float currentFlatSpeed = Vector3.Dot(flatVelocity, groundForward);
 
-        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        Vector3 desiredVelocity = flatForward * currentSpeed;
-        Vector3 velocityDiff = desiredVelocity - flatVelocity;
+        // 3. Accélération progressive si besoin
+        float speedDiff = targetSpeed - currentFlatSpeed;
+        float accel = Mathf.Sign(speedDiff) * Mathf.Min(Mathf.Abs(speedDiff), acceleration * Time.fixedDeltaTime);
 
-        Vector3 force = velocityDiff * gripMultiplier;
-        rb.AddForce(force, ForceMode.Acceleration);
+        Vector3 force = groundForward * accel * gripMultiplier;
+        rb.AddForce(force, ForceMode.VelocityChange);
 
+        // 4. Freinage manuel
         if (brake > 0f)
         {
-            Vector3 forwardVel = Vector3.Project(flatVelocity, flatForward);
-            Vector3 brakeForceVec = -forwardVel * brake * brakeForce * Time.fixedDeltaTime;
-            rb.AddForce(brakeForceVec, ForceMode.VelocityChange);
+            Vector3 forwardVel = Vector3.Project(flatVelocity, groundForward);
+            Vector3 brakeVec = -forwardVel * brake * brakeForce * Time.fixedDeltaTime;
+            rb.AddForce(brakeVec, ForceMode.VelocityChange);
 
-            Vector3 lateralVel = Vector3.Project(flatVelocity, transform.right);
-            rb.AddForce(-lateralVel * 0.5f * brake, ForceMode.VelocityChange);
+            Vector3 lateralVel = Vector3.Project(rb.velocity, transform.right);
+            rb.AddForce(-lateralVel * 0.3f * brake, ForceMode.VelocityChange);
         }
 
+        // 5. Rotation / Steering
         float steerAmount = steering * turnSpeed * Time.fixedDeltaTime;
-        Quaternion steerRotation = Quaternion.Euler(0f, steerAmount, 0f);
-        rb.MoveRotation(rb.rotation * steerRotation);
+        Quaternion steerRot = Quaternion.Euler(0f, steerAmount, 0f);
+        rb.MoveRotation(rb.rotation * steerRot);
     }
+
 
 
 
