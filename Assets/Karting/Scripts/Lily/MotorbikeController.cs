@@ -33,8 +33,10 @@ public class MotorbikeController : MonoBehaviour
     {
         ApplyMovement();
         ApplyStabilization();
-        ApplyLeaning();
+        //ApplyLeaning();
         ClampMaxSpeed();
+        Debug.Log($"Throttle: {input.throttleInput}, Speed: {rb.velocity.magnitude}, Accel: {acceleration}");
+
     }
 
     private void ApplyMovement()
@@ -45,6 +47,8 @@ public class MotorbikeController : MonoBehaviour
         float throttle = Mathf.Clamp01(input.throttleInput);
         float brake = Mathf.Clamp01(input.brakeInput);
         float steering = input.steeringInput;
+
+        Debug.Log(acceleration);
 
         // 2. Calcul de vitesse cible
         float targetSpeed = throttle * maxSpeed;

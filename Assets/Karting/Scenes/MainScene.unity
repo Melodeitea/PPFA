@@ -4755,7 +4755,7 @@ PrefabInstance:
     - target: {fileID: 6879368523494750158, guid: 7fde84868c9c04042a6a3840c656d65c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00168
+      value: -0.0017082159
       objectReference: {fileID: 0}
     - target: {fileID: 6879368523494750158, guid: 7fde84868c9c04042a6a3840c656d65c,
         type: 3}
@@ -11856,6 +11856,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1272809405107844074, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
+      propertyPath: m_Name
+      value: Meshes
+      objectReference: {fileID: 0}
+    - target: {fileID: 1272809405107844074, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
@@ -11872,12 +11877,12 @@ PrefabInstance:
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: turnSpeed
-      value: 25
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: brakeForce
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
@@ -11887,7 +11892,7 @@ PrefabInstance:
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: uprightForce
-      value: 5000
+      value: 4920
       objectReference: {fileID: 0}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
@@ -12063,17 +12068,47 @@ PrefabInstance:
     - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: m_CenterOfMass.x
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: m_CenterOfMass.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: m_CenterOfMass.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_InertiaTensor.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_InertiaTensor.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_InertiaTensor.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_InertiaRotation.w
+      value: 0.9999619
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: m_InertiaRotation.z
+      value: 0.008726535
       objectReference: {fileID: 0}
     - target: {fileID: 4810912518991602693, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
@@ -12314,7 +12349,7 @@ PrefabInstance:
     - target: {fileID: 1650907424773507132, guid: 1a17fc8e192ba2c47ba7b38e4559dd6b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00168
+      value: -0.0018149816
       objectReference: {fileID: 0}
     - target: {fileID: 1650907424773507132, guid: 1a17fc8e192ba2c47ba7b38e4559dd6b,
         type: 3}
