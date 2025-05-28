@@ -12179,7 +12179,7 @@ MonoBehaviour:
   blurCanvasGroup: {fileID: 533716913}
   maxBlurAlpha: 0.8
   audioSource: {fileID: 1687723347}
-  fatigueSound: {fileID: 0}
+  fatigueSound: {fileID: 8300000, guid: 710b28642444aba488595574718c2ed4, type: 3}
 --- !u!4 &826894478
 Transform:
   m_ObjectHideFlags: 0
@@ -14660,7 +14660,8 @@ MonoBehaviour:
   animalSpeed: 5
   animalLifetime: 10
   audioSource: {fileID: 1687723347}
-  spawnSound: {fileID: 0}
+  spawnDog: {fileID: 8300000, guid: 971f117d0ddbb8a4c8ef5ddaf8b0a906, type: 3}
+  spawnCat: {fileID: 8300000, guid: 540ad56f15e7d43448695ad8767934bd, type: 3}
 --- !u!4 &1030207819
 Transform:
   m_ObjectHideFlags: 0
@@ -18765,6 +18766,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
+      propertyPath: brakeSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 8aa0812271897dc498543401d19984a2, type: 3}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: crashSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 314b8863fe5d36f4f959b379f419d1b5, type: 3}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: driftSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: f0bc7a7cae87f4a46a135e8b86f7d91b, type: 3}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
       propertyPath: maxSpeed
       value: 50
       objectReference: {fileID: 0}
@@ -18773,6 +18789,11 @@ PrefabInstance:
       propertyPath: baseSpeed
       value: 0.05
       objectReference: {fileID: 0}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: carHitSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 314b8863fe5d36f4f959b379f419d1b5, type: 3}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: turnSpeed
@@ -18785,6 +18806,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
+      propertyPath: treeHitSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 99bc92328fe99524d948c0f798a8fae4, type: 3}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1687723347}
@@ -18793,6 +18819,11 @@ PrefabInstance:
       propertyPath: acceleration
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
+        type: 3}
+      propertyPath: animalHitSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: c041f54504f9a3142972c9aa6a3c6f59, type: 3}
     - target: {fileID: 1950672344012276755, guid: 19954de30401f73428254541a9ad156e,
         type: 3}
       propertyPath: uprightForce
@@ -27834,7 +27865,7 @@ MonoBehaviour:
   carSpeed: 25
   carLifetime: 10
   audioSource: {fileID: 1687723347}
-  trafficSpawnClip: {fileID: 0}
+  trafficSpawnClip: {fileID: 8300000, guid: 221df77410ef8a44eb1173bc0224defa, type: 3}
 --- !u!4 &1983650758
 Transform:
   m_ObjectHideFlags: 0
@@ -28929,7 +28960,7 @@ MonoBehaviour:
   rainPrefab: {fileID: 2707952879601834932, guid: 03afab48d3571df4d85198d598868eb4,
     type: 3}
   rainAudioSource: {fileID: 1687723347}
-  rainLoop: {fileID: 0}
+  rainLoop: {fileID: 8300000, guid: 9c9d26b4583880f42a1f382ad3400b47, type: 3}
 --- !u!4 &2115579952
 Transform:
   m_ObjectHideFlags: 0
