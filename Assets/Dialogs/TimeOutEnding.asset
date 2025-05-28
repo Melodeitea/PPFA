@@ -15,27 +15,27 @@ MonoBehaviour:
   lines:
   - speakerName: Child
     content: "Dad? Are you still there?\r"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: "It\u2019s getting louder... they're getting closer.\r\n"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: 'Please... please hurry...
 
 '
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
-    content: 
-    duration: 0
+    content: I-
+    duration: 3
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: No...
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: Oh my god, sweetie?!
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}

@@ -17,21 +17,21 @@ MonoBehaviour:
     content: ' Dad...?
 
 '
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " I\u2019ve got you.\r\n You're safe now.\r\n"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: ' You came for me.
 
 '
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: ' Always.
 
 '
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}

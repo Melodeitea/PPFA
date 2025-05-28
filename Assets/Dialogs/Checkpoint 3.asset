@@ -16,17 +16,17 @@ MonoBehaviour:
   - speakerName: Child
     content: " I\u2019m in the bathroom. I locked the door.\r\n I can still hear
       people screaming.\r\n"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " Stay down. Don\u2019t make a sound. I\u2019m almost there.\r\n"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: " Please hurry. Please. I don\u2019t wanna die in here.\r\n"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " You won\u2019t. You hear me? I won\u2019t let that happen.\r\n"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}

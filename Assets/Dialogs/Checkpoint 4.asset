@@ -15,20 +15,20 @@ MonoBehaviour:
   lines:
   - speakerName: Child
     content: " They're close. I think they\u2019re in the hallway.\r\n"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: ' Almost there. Two more blocks.
 
 '
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: " I love you.\r\n If I don\u2019t make it\u2014\r\n"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " Don\u2019t say that. Just breathe.\r\n We\u2019re going to walk out
       of there together. You and me. I promise.\r\n"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}

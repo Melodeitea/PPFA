@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0000038887933, g: 0.000004883118, b: 0.014919429,
+  m_IndirectSpecularColor: {r: 0.0000041940484, g: 0.000004875672, b: 0.014920142,
     a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -9657,7 +9657,7 @@ MonoBehaviour:
   - {fileID: 2046521440}
   - {fileID: 1333482846}
   - {fileID: 1514138777}
-  spawnInterval: 5
+  spawnInterval: 3
   animalSpeed: 5
   animalLifetime: 10
 --- !u!4 &1030207819
@@ -10318,7 +10318,8 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6754692784599785101, guid: 6d9796d84c9e5a54fb4e014484945a46, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

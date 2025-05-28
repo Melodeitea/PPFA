@@ -1,26 +1,35 @@
 ﻿﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
-{ 
+{
+    [Header("Timer Settings")]
+    public bool useTimer = true;
+    public float totalTimeInSeconds = 180f; // Default: 3 minutes
+
     public bool IsFinite { get; private set; }
     public float TotalTime { get; private set; }
     public float TimeRemaining { get; private set; }
     public bool IsOver { get; private set; }
 
-    private bool raceStarted;
+    private bool raceStarted = false;
 
     public static Action<float> OnAdjustTime;
     public static Action<int, bool, GameMode> OnSetTime;
 
     private void Awake()
     {
-        IsFinite = false;
+        TotalTime = totalTimeInSeconds;
         TimeRemaining = TotalTime;
+        IsFinite = useTimer;
+        IsOver = false;
     }
 
+    private void Start()
+    {
+        // Automatically start the timer on game start
+        StartRace();
+    }
 
     void OnEnable()
     {
@@ -37,6 +46,7 @@ public class TimeManager : MonoBehaviour
     private void AdjustTime(float delta)
     {
         TimeRemaining += delta;
+        TimeRemaining = Mathf.Clamp(TimeRemaining, 0, TotalTime);
     }
 
     private void SetTime(int time, bool isFinite, GameMode gameMode)
@@ -49,7 +59,7 @@ public class TimeManager : MonoBehaviour
     void Update()
     {
         if (!raceStarted) return;
-        
+
         if (IsFinite && !IsOver)
         {
             TimeRemaining -= Time.deltaTime;
@@ -66,8 +76,8 @@ public class TimeManager : MonoBehaviour
         raceStarted = true;
     }
 
-    public void StopRace() {
+    public void StopRace()
+    {
         raceStarted = false;
     }
 }
-

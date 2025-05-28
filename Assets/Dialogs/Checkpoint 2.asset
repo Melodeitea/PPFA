@@ -15,22 +15,18 @@ MonoBehaviour:
   lines:
   - speakerName: Child
     content: " Dad?\r\n Something\u2019s wrong. People are... pushing.\r"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " What\u2019s happening?\r"
-    duration: 0
-    voiceClip: {fileID: 0}
-  - speakerName: Parent
-    content: " What\u2019s happening?\r"
-    duration: 0
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: " I don\u2019t know. The music stopped. Everyone\u2019s running. I think
       someone fell.\r\n\r"
-    duration: 0
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
-    content: " Find a place to hide. I\u2019m coming."
-    duration: 0
+    content: " Take a deep breath. It's okay. Find a place to hide. I\u2019m coming."
+    duration: 2
     voiceClip: {fileID: 0}
