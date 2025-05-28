@@ -33,7 +33,7 @@ public class TimerHUDManager : MonoBehaviour
         int timeRemaining = Mathf.CeilToInt(m_TimeManager.TimeRemaining);
 
         // Debug info
-        Debug.Log($"[TimerHUD] Time remaining: {timeRemaining}s");
+       // Debug.Log($"[TimerHUD] Time remaining: {timeRemaining}s");
 
         // Update UI
         timerText.text = string.Format("{0}:{1:00}", timeRemaining / 60, timeRemaining % 60);

@@ -4,52 +4,79 @@ using System.Collections.Generic;
 
 public class TimelineController : MonoBehaviour
 {
-    public float totalDuration = 180f;
-    private float timer;
+	public float totalDuration = 180f;
+	private float timer;
+	private bool ended = false;
 
-    [System.Serializable]
-    public class TimedEvent
-    {
-        public string eventName;
-        public float triggerTime;
-        public UnityEvent onTrigger;
-        public bool hasTriggered = false;
-    }
+	public enum EndingType { Good, Timeout, Crash }
+	public EndingType endingType = EndingType.Timeout;
 
-    public List<TimedEvent> events = new List<TimedEvent>();
+	[System.Serializable]
+	public class TimedEvent
+	{
+		public string eventName;
+		public float triggerTime;
+		public UnityEvent onTrigger;
+		public bool hasTriggered = false;
+	}
 
-    void Update()
-    {
-        timer += Time.deltaTime;
+	public List<TimedEvent> events = new List<TimedEvent>();
 
-        foreach (var e in events)
-        {
-            if (!e.hasTriggered && timer >= e.triggerTime)
-            {
-                Debug.Log($"[Timeline] Triggering: {e.eventName} at {timer:F2}s");
-                e.onTrigger.Invoke();
-                e.hasTriggered = true;
-            }
-        }
+	void Update()
+	{
+		if (ended) return;
 
-        if (timer >= totalDuration)
-        {
-            EndSequence();
-        }
-    }
+		timer += Time.deltaTime;
 
-    void EndSequence()
-    {
-        Debug.Log("[Timeline] Sequence ended.");
-        // Trigger anything here like fade, end cutscene, etc.
-    }
+		foreach (var e in events)
+		{
+			if (!e.hasTriggered && timer >= e.triggerTime)
+			{
+				Debug.Log($"[Timeline] Triggering: {e.eventName} at {timer:F2}s");
+				e.onTrigger.Invoke();
+				e.hasTriggered = true;
+			}
+		}
 
-    public void ResetTimeline()
-    {
-        timer = 0f;
-        foreach (var e in events)
-        {
-            e.hasTriggered = false;
-        }
-    }
+		if (timer >= totalDuration)
+		{
+			endingType = EndingType.Timeout;
+			EndSequence();
+		}
+	}
+
+	public void EndSequence()
+	{
+		if (ended) return;
+		ended = true;
+
+		Debug.Log($"[Timeline] Sequence ended with: {endingType}");
+
+		GameEndingManager manager = FindObjectOfType<GameEndingManager>();
+		if (manager != null)
+		{
+			switch (endingType)
+			{
+				case EndingType.Good:
+					manager.TriggerGoodEnding();
+					break;
+				case EndingType.Crash:
+					manager.TriggerBadEnding_Crash();
+					break;
+				case EndingType.Timeout:
+					manager.TriggerBadEnding_Timeout();
+					break;
+			}
+		}
+	}
+
+	public void ResetTimeline()
+	{
+		timer = 0f;
+		ended = false;
+		foreach (var e in events)
+		{
+			e.hasTriggered = false;
+		}
+	}
 }

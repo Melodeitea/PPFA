@@ -15,22 +15,22 @@ MonoBehaviour:
   lines:
   - speakerName: Parent
     content: " You're doing okay? How\u2019s the concert?\r"
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: " Yeah... it\u2019s loud. But good.\r\n Kinda wish you were here, though."
-    duration: 3
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " You know I\u2019d rather be out here with the wind than packed in
       with a crowd.\r\n Still\u2026 I\u2019m glad you're enjoying it.\r"
-    duration: 3
+    duration: 2
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: " Yeah... it\u2019s cool. Really crowded, though."
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " Stay close to the exits, superstar.\r\r"
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}

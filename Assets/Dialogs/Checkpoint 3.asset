@@ -16,7 +16,7 @@ MonoBehaviour:
   - speakerName: Child
     content: " I\u2019m in the bathroom. I locked the door.\r\n I can still hear
       people screaming.\r\n"
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " Stay down. Don\u2019t make a sound. I\u2019m almost there.\r\n"

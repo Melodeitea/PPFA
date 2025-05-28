@@ -2,35 +2,42 @@ using UnityEngine;
 
 public class AnimalObstacleSpawner : MonoBehaviour
 {
-    public GameObject[] animalPrefabs;
-    public Transform[] spawnPoints;
-    public float spawnInterval = 5f;
-    public float animalSpeed = 5f;
-    public float animalLifetime = 10f;
+	public GameObject[] animalPrefabs;
+	public Transform[] spawnPoints;
+	public float spawnInterval = 5f;
+	public float animalSpeed = 5f;
+	public float animalLifetime = 10f;
 
-    private bool isActive = false;
+	private bool isActive = false;
 
-    public void ActivateAnimals()
-    {
-        isActive = true;
-        InvokeRepeating(nameof(SpawnAnimal), 1f, spawnInterval);
-    }
+	public AudioSource audioSource;
+	public AudioClip spawnSound;
 
-    public void DeactivateAnimals()
-    {
-        isActive = false;
-        CancelInvoke(nameof(SpawnAnimal));
-    }
+	public void ActivateAnimals()
+	{
+		isActive = true;
+		InvokeRepeating(nameof(SpawnAnimal), 1f, spawnInterval);
+	}
 
-    void SpawnAnimal()
-    {
-        if (!isActive || spawnPoints.Length == 0 || animalPrefabs.Length == 0) return;
+	public void DeactivateAnimals()
+	{
+		isActive = false;
+		CancelInvoke(nameof(SpawnAnimal));
+	}
 
-        Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        GameObject prefab = animalPrefabs[Random.Range(0, animalPrefabs.Length)];
-        GameObject animal = Instantiate(prefab, spawn.position, spawn.rotation);
-        animal.GetComponent<Rigidbody>().velocity = spawn.right * animalSpeed;
+	void SpawnAnimal()
+	{
+		if (!isActive || spawnPoints.Length == 0 || animalPrefabs.Length == 0) return;
 
-        Destroy(animal, animalLifetime);
-    }
+		Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+		GameObject prefab = animalPrefabs[Random.Range(0, animalPrefabs.Length)];
+		GameObject animal = Instantiate(prefab, spawn.position, spawn.rotation);
+		animal.GetComponent<Rigidbody>().velocity = spawn.right * animalSpeed;
+
+		if (audioSource && spawnSound)
+			audioSource.PlayOneShot(spawnSound);
+
+		Destroy(animal, animalLifetime);
+	}
+
 }

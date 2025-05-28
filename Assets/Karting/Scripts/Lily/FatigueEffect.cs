@@ -4,61 +4,74 @@ using UnityEngine.UI;
 
 public class FatigueEffect : MonoBehaviour
 {
-    [Header("Fatigue Parameters")]
-    public float fatigueDuration = 15f;
-    public float fatigueGripMultiplier = 0.7f;
-    public Light blindingLight;
+	[Header("Fatigue Parameters")]
+	public float fatigueDuration = 15f;
+	public float fatigueGripMultiplier = 0.7f;
+	public Light blindingLight;
 
-    [Header("UI Overlay")]
-    public CanvasGroup blurCanvasGroup; // Simule la vision floue avec une UI
-    public float maxBlurAlpha = 0.8f;
+	[Header("UI Overlay")]
+	public CanvasGroup blurCanvasGroup; // Simule la vision floue avec une UI
+	public float maxBlurAlpha = 0.8f;
 
-    private float timer;
-    private MotorbikeController bike;
+	private float timer;
+	private MotorbikeController bike;
 
-    public void ActivateFatigue()
-    {
-        bike = FindObjectOfType<MotorbikeController>();
-        if (bike != null)
-            bike.SetGripMultiplier(fatigueGripMultiplier);
+	public AudioSource audioSource;
+	public AudioClip fatigueSound;
 
-        if (blurCanvasGroup != null)
-            blurCanvasGroup.alpha = maxBlurAlpha;
+	public void ActivateFatigue()
+	{
+		bike = FindObjectOfType<MotorbikeController>();
+		if (bike != null)
+			bike.SetGripMultiplier(fatigueGripMultiplier);
 
-        if (blindingLight != null)
-            blindingLight.enabled = true;
+		if (blurCanvasGroup != null)
+			blurCanvasGroup.alpha = maxBlurAlpha;
 
-        timer = fatigueDuration;
-        StartCoroutine(FatigueTimer());
-    }
+		if (blindingLight != null)
+			blindingLight.enabled = true;
 
-    IEnumerator FatigueTimer()
-    {
-        while (timer > 0)
-        {
-            timer -= Time.deltaTime;
+		if (audioSource && fatigueSound)
+			audioSource.PlayOneShot(fatigueSound);
 
-            if (blindingLight != null)
-                blindingLight.intensity = Mathf.PingPong(Time.time * 10f, 3f) + 1f;
+		timer = fatigueDuration;
+		StartCoroutine(FatigueTimer());
+	}
 
-            yield return null;
-        }
+	IEnumerator FatigueTimer()
+	{
+		float elapsed = 0f;
 
-        DeactivateFatigue();
-    }
+		while (elapsed < fatigueDuration)
+		{
+			elapsed += Time.deltaTime;
+			float progress = elapsed / fatigueDuration;
 
-    public void DeactivateFatigue()
-    {
-        if (bike != null)
-            bike.ResetGripMultiplier();
+			if (blurCanvasGroup != null)
+				blurCanvasGroup.alpha = Mathf.Lerp(maxBlurAlpha, 0f, progress);
 
-        if (blurCanvasGroup != null)
-            blurCanvasGroup.alpha = 0f;
+			if (blindingLight != null)
+				blindingLight.intensity = Mathf.Lerp(4f, 0f, progress) + Mathf.Sin(Time.time * 20f) * 0.5f;
 
-        if (blindingLight != null)
-        {
-            blindingLight.intensity = 0f;
-            blindingLight.enabled = false;
-        }
-    }
+			yield return null;
+		}
+
+		DeactivateFatigue();
+	}
+
+
+	public void DeactivateFatigue()
+	{
+		if (bike != null)
+			bike.ResetGripMultiplier();
+
+		if (blurCanvasGroup != null)
+			blurCanvasGroup.alpha = 0f;
+
+		if (blindingLight != null)
+		{
+			blindingLight.intensity = 0f;
+			blindingLight.enabled = false;
+		}
+	}
 }

@@ -16,6 +16,7 @@ public class TimeManager : MonoBehaviour
 
     public static Action<float> OnAdjustTime;
     public static Action<int, bool, GameMode> OnSetTime;
+    public static event Action OnTimeOver;
 
     private void Awake()
     {
@@ -58,17 +59,22 @@ public class TimeManager : MonoBehaviour
 
     void Update()
     {
-        if (!raceStarted) return;
+        if (!raceStarted || !IsFinite || IsOver) return;
 
-        if (IsFinite && !IsOver)
+        TimeRemaining -= Time.deltaTime;
+        if (TimeRemaining <= 0)
         {
-            TimeRemaining -= Time.deltaTime;
-            if (TimeRemaining <= 0)
+            TimeRemaining = 0;
+            IsOver = true;
+
+            TimelineController controller = FindObjectOfType<TimelineController>();
+            if (controller != null)
             {
-                TimeRemaining = 0;
-                IsOver = true;
+                controller.endingType = TimelineController.EndingType.Timeout;
+                controller.EndSequence();
             }
         }
+
     }
 
     public void StartRace()

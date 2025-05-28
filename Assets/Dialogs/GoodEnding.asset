@@ -21,13 +21,13 @@ MonoBehaviour:
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: " I\u2019ve got you.\r\n You're safe now.\r\n"
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Child
     content: ' You came for me.
 
 '
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
   - speakerName: Parent
     content: ' Always.

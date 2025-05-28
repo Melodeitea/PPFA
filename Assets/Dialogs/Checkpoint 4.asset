@@ -30,5 +30,5 @@ MonoBehaviour:
   - speakerName: Parent
     content: " Don\u2019t say that. Just breathe.\r\n We\u2019re going to walk out
       of there together. You and me. I promise.\r\n"
-    duration: 2
+    duration: 1
     voiceClip: {fileID: 0}
