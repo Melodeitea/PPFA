@@ -11,7 +11,9 @@ public class AnimalObstacleSpawner : MonoBehaviour
 	private bool isActive = false;
 
 	public AudioSource audioSource;
-	public AudioClip spawnSound;
+	public AudioClip spawnDog;
+	public AudioClip spawnCat;
+
 
 	public void ActivateAnimals()
 	{
@@ -34,10 +36,21 @@ public class AnimalObstacleSpawner : MonoBehaviour
 		GameObject animal = Instantiate(prefab, spawn.position, spawn.rotation);
 		animal.GetComponent<Rigidbody>().velocity = spawn.right * animalSpeed;
 
-		if (audioSource && spawnSound)
-			audioSource.PlayOneShot(spawnSound);
+		if (audioSource)
+		{
+			// Check prefab name and play the corresponding sound
+			if (prefab.name.ToLower().Contains("dog") && spawnDog != null)
+			{
+				audioSource.PlayOneShot(spawnDog);
+			}
+			else if (prefab.name.ToLower().Contains("cat") && spawnCat != null)
+			{
+				audioSource.PlayOneShot(spawnCat);
+			}
+		}
 
 		Destroy(animal, animalLifetime);
 	}
+
 
 }
