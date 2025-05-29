@@ -27,7 +27,6 @@ public class GameEndingManager : MonoBehaviour
 		if (hasEnded) return;
 		hasEnded = true;
 		StartCoroutine(HandleEnding(goodEndingDialog, goodEndingMusic));
-		dialogManager.PlayDialog(goodEndingDialog);
 		Debug.Log("Good ending triggered!");
 	}
 
@@ -36,7 +35,6 @@ public class GameEndingManager : MonoBehaviour
 		if (hasEnded) return;
 		hasEnded = true;
 		StartCoroutine(HandleEnding(crashEndingDialog, badEndingMusic_Crash));
-		dialogManager.PlayDialog(crashEndingDialog);
 		Debug.Log("Crash ending triggered!");
 	}
 
@@ -45,9 +43,9 @@ public class GameEndingManager : MonoBehaviour
 		if (hasEnded) return;
 		hasEnded = true;
 		StartCoroutine(HandleEnding(timeoutEndingDialog, badEndingMusic_Timeout));
-		dialogManager.PlayDialog(timeoutEndingDialog);
 		Debug.Log("Timeout ending triggered!");
 	}
+
 
 	private IEnumerator HandleEnding(DialogSequence dialog, AudioClip music)
 	{
@@ -62,13 +60,16 @@ public class GameEndingManager : MonoBehaviour
 			musicSource.Play();
 		}
 
+		// Small delay before dialog (ensures canvas is visible)
+		yield return new WaitForSeconds(0.5f);
+
 		// Start dialog
-		DialogManager dialogManager = FindObjectOfType<DialogManager>();
 		if (dialogManager && dialog != null)
 		{
 			dialogManager.PlayDialog(dialog);
 		}
 	}
+
 
 	private IEnumerator FadeInBlackOverlay()
 	{

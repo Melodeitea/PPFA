@@ -6,7 +6,7 @@ public class TimelineController : MonoBehaviour
 {
 	public float totalDuration = 180f;
 	private float timer;
-	private bool ended = false;
+	public static bool HasEnded = false; // NEW
 
 	public enum EndingType { Good, Timeout, Crash }
 	public EndingType endingType = EndingType.Timeout;
@@ -24,7 +24,7 @@ public class TimelineController : MonoBehaviour
 
 	void Update()
 	{
-		if (ended) return;
+		if (HasEnded) return;
 
 		timer += Time.deltaTime;
 
@@ -40,16 +40,20 @@ public class TimelineController : MonoBehaviour
 
 		if (timer >= totalDuration)
 		{
-			endingType = EndingType.Timeout;
-			EndSequence();
+			TryEndSequence(EndingType.Timeout);
 		}
+	}
+
+	public void TryEndSequence(EndingType type)
+	{
+		if (HasEnded) return;
+		HasEnded = true;
+		endingType = type;
+		EndSequence();
 	}
 
 	public void EndSequence()
 	{
-		if (ended) return;
-		ended = true;
-
 		Debug.Log($"[Timeline] Sequence ended with: {endingType}");
 
 		GameEndingManager manager = FindObjectOfType<GameEndingManager>();
@@ -67,16 +71,6 @@ public class TimelineController : MonoBehaviour
 					manager.TriggerBadEnding_Timeout();
 					break;
 			}
-		}
-	}
-
-	public void ResetTimeline()
-	{
-		timer = 0f;
-		ended = false;
-		foreach (var e in events)
-		{
-			e.hasTriggered = false;
 		}
 	}
 }

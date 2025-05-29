@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class CrashDetector : MonoBehaviour
 {
-    private bool hasCrashed = false;
+	private bool hasCrashed = false;
 
-	void OnCollisionEnter(Collision collision)
+	private void OnCollisionEnter(Collision collision)
 	{
+		if (hasCrashed || TimelineController.HasEnded) return;
+
 		if (collision.collider.CompareTag("Car") || collision.collider.CompareTag("Trees"))
 		{
-			TimelineController controller = FindObjectOfType<TimelineController>();
+			var controller = FindObjectOfType<TimelineController>();
 			if (controller != null)
 			{
-				controller.endingType = TimelineController.EndingType.Crash;
-				controller.EndSequence();
+				hasCrashed = true;
+				controller.TryEndSequence(TimelineController.EndingType.Crash);
+				Debug.Log($"Crash detected with {collision.collider.name}");
 			}
 		}
 	}
-
 }
