@@ -361,6 +361,22 @@ InputManager:
     m_Name: LeftStickX
     descriptiveName: 
     descriptiveNegativeName: 
+    negativeButton: q
+    positiveButton: d
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.1
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: LeftStickX
+    descriptiveName: 
+    descriptiveNegativeName: 
     negativeButton: left
     positiveButton: right
     altNegativeButton: 
@@ -390,6 +406,22 @@ InputManager:
     axis: 3
     joyNum: 0
   - serializedVersion: 3
+    m_Name: RightStickX
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: a
+    positiveButton: e
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.1
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 2
+    axis: 3
+    joyNum: 0
+  - serializedVersion: 3
     m_Name: RT
     descriptiveName: 
     descriptiveNegativeName: 
@@ -403,7 +435,23 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 9
+    axis: 1
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: RT
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: s
+    positiveButton: z
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
     joyNum: 0
   - serializedVersion: 3
     m_Name: LT
@@ -420,6 +468,22 @@ InputManager:
     invert: 0
     type: 2
     axis: 8
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: LT
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: s
+    positiveButton: s
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 0
+    dead: 0.19
+    sensitivity: 1
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: Debug Horizontal

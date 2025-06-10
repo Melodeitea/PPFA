@@ -12,7 +12,7 @@ namespace bullet.fx.pack {
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(forward - firePoint.position) * Quaternion.Euler(90, 0, 0));
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
-            rb.linearVelocity = (forward - firePoint.position) * bulletSpeed;
+          //  rb.linearVelocity = (forward - firePoint.position) * bulletSpeed;
         
             rb.AddForce(Vector3.down * gravityForce, ForceMode.Acceleration);
         }
